@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Parking Lot - Admin{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">Edit Parking Lot</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Location Name</label>
+                                <input type="text" class="form-control" id="name" name="name" 
+                                       value="{{ lot.prime_location_name }}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="pin_code" class="form-label">Pin Code</label>
+                                <input type="text" class="form-control" id="pin_code" name="pin_code" 
+                                       value="{{ lot.pin_code }}" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Price per Hour (₹)</label>
+                                <input type="number" class="form-control" id="price" name="price" 
+                                       value="{{ lot.price }}" step="0.01" min="0" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="max_spots" class="form-label">Maximum Spots</label>
+                                <input type="number" class="form-control" id="max_spots" name="max_spots" 
+                                       value="{{ lot.maximum_number_of_spots }}" min="1" required>
+                                <div class="form-text">
+                                    Current spots: {{ lot.maximum_number_of_spots }}
+                                    {% if occupied_count > 0 %}
+                                        <br><span class="text-warning">{{ occupied_count }} spots currently occupied</span>
+                                        <br><span class="text-muted">Minimum spots allowed: {{ occupied_count }}</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-warning btn-lg">Update Parking Lot</button>
+                        <a href="{{ url_for('admin.view_lots') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

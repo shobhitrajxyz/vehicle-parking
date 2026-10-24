@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Parking Records - Admin{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- Summary Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body text-center">
+                        <h3>{{ summary.total_sessions }}</h3>
+                        <p class="mb-0">Total Sessions</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body text-center">
+                        <h3>{{ summary.completed_sessions }}</h3>
+                        <p class="mb-0">Completed</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-dark">
+                    <div class="card-body text-center">
+                        <h3>{{ summary.active_sessions }}</h3>
+                        <p class="mb-0">Active</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body text-center">
+                        <h3>₹{{ summary.total_revenue }}</h3>
+                        <p class="mb-0">Total Revenue</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Records Table -->
+        <div class="card shadow">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">All Parking Records</h4>
+            </div>
+            <div class="card-body">
+                {% if records %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>User</th>
+                                    <th>Spot ID</th>
+                                    <th>Parking Lot</th>
+                                    <th>Vehicle Number</th>
+                                    <th>Vehicle Model</th>
+                                    <th>Parked Time</th>
+                                    <th>Left Time</th>
+                                    <th>Duration</th>
+                                    <th>Cost</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in records %}
+                                <tr>
+                                    <td>{{ record.user.username }}</td>
+                                    <td><strong>{{ record.reservation.spot_id }}</strong></td>
+                                    <td>{{ record.lot.prime_location_name }}</td>
+                                    <td><strong>{{ record.reservation.vehicle_number or 'N/A' }}</strong></td>
+                                    <td>{{ record.reservation.vehicle_model or 'N/A' }}</td>
+                                    <td>{{ record.reservation.parking_timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                                    <td>
+                                        {% if record.reservation.leaving_timestamp %}
+                                            {{ record.reservation.leaving_timestamp.strftime('%Y-%m-%d %H:%M') }}
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if record.reservation.leaving_timestamp %}
+                                            {{ record.duration_minutes if record.duration_minutes > 0 else 1 }} min
+                                        {% else %}
+                                            Active
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if record.reservation.parking_cost %}
+                                            ₹{{ record.reservation.parking_cost }}
+                                        {% else %}
+                                            ₹0
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if record.reservation.leaving_timestamp %}
+                                            <span class="badge bg-success">Completed</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Active</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <h5>No parking records found!</h5>
+                        <p>Records will appear here once users start making reservations.</p>
+                    </div>
+                {% endif %}
+                
+                <div class="mt-3">
+                    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary">← Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

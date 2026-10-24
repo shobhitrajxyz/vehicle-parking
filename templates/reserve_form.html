@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Reserve Parking Spot - User{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">Reserve Parking Spot</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h5 class="text-success">Parking Lot Details</h5>
+                    <p><strong>Location:</strong> {{ lot.prime_location_name }}</p>
+                    <p><strong>Price:</strong> ₹{{ lot.price }}/hour</p>
+                    <p><strong>Pin Code:</strong> {{ lot.pin_code }}</p>
+                    <p><strong>Available Spots:</strong> {{ available_spots }}</p>
+                </div>
+                
+                <hr>
+                
+                <form method="POST" action="{{ url_for('user.reserve_spot', lot_id=lot.id) }}">
+                    <h5 class="text-primary mb-3">Vehicle Details</h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="vehicle_number" class="form-label">Vehicle Number</label>
+                                <input type="text" class="form-control" id="vehicle_number" name="vehicle_number" 
+                                       placeholder="e.g., KA01AB1234" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="vehicle_model" class="form-label">Vehicle Model (Optional)</label>
+                                <input type="text" class="form-control" id="vehicle_model" name="vehicle_model" 
+                                       placeholder="e.g., Honda City">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">Reserve Spot</button>
+                        <a href="{{ url_for('user.view_lots') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

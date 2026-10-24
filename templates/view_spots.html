@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}View Parking Spots - Admin{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">All Parking Spots</h4>
+                <span class="badge bg-primary">Total Spots: {{ spots|length }}</span>
+            </div>
+            <div class="card-body">
+                {% if spots %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-warning">
+                                <tr>
+                                    <th>Spot ID</th>
+                                    <th>Parking Lot</th>
+                                    <th>Status</th>
+                                    <th>Vehicle Details</th>
+                                    <th>User Info</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for spot_data in spots %}
+                                <tr>
+                                    <td><strong>{{ spot_data.spot.id }}</strong></td>
+                                    <td>{{ spot_data.lot.prime_location_name }}</td>
+                                    <td>
+                                        {% if spot_data.spot.status == 'A' %}
+                                            <span class="badge bg-success">Available</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Occupied</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if spot_data.vehicle_info %}
+                                            <strong>{{ spot_data.vehicle_info.vehicle_number }}</strong><br>
+                                            <small class="text-muted">{{ spot_data.vehicle_info.vehicle_model or 'Model not specified' }}</small>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if spot_data.vehicle_info %}
+                                            <strong>{{ spot_data.vehicle_info.user_name }}</strong><br>
+                                            <small class="text-muted">Since: {{ spot_data.vehicle_info.parked_since.strftime('%Y-%m-%d %H:%M') }}</small>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <h5>No parking spots found!</h5>
+                        <p>Create parking lots first to generate spots automatically.</p>
+                        <a href="{{ url_for('admin.add_lot') }}" class="btn btn-primary">Add Parking Lot</a>
+                    </div>
+                {% endif %}
+                
+                <div class="mt-3">
+                    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary">← Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

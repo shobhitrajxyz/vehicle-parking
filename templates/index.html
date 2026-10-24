@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Parking Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="jumbotron bg-light p-5 rounded">
+            <h1 class="display-4">Welcome to Parking Management System</h1>
+            <p class="lead">Efficient parking solution for 4-wheeler vehicles with real-time availability and automated cost calculation.</p>
+            <hr class="my-4">
+            
+            {% if not session.role %}
+                <p>Get started by logging in or creating a new account.</p>
+                <a class="btn btn-primary btn-lg me-2" href="{{ url_for('auth.login') }}">Login</a>
+                <a class="btn btn-primary btn-lg me-2" href="{{ url_for('auth.register') }}">Register</a>
+            {% elif session.role == 'admin' %}
+                <p>Welcome back, Admin! Manage your parking system.</p>
+                <a class="btn btn-success btn-lg" href="{{ url_for('admin.dashboard') }}">Go to Admin Dashboard</a>
+            {% elif session.role == 'user' %}
+                <p>Welcome back! Find and reserve your parking spot.</p>
+                <a class="btn btn-success btn-lg" href="{{ url_for('user.dashboard') }}">Go to My Dashboard</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Easy Parking</h5>
+                <p class="card-text">Find and reserve parking spots instantly with our automated allocation system.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Fair Pricing</h5>
+                <p class="card-text">Pay only for the time you use with automatic cost calculation based on duration.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">Real-time Status</h5>
+                <p class="card-text">Check parking availability and manage your reservations in real-time.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

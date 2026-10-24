@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}View Users - Admin{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">All Registered Users</h4>
+                <span class="badge bg-light text-dark">Total Users: {{ users|length }}</span>
+            </div>
+            <div class="card-body">
+                {% if users %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-success">
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>Email Address</th>
+                                    <th>Full Name</th>
+                                    <th>Registration Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for user in users %}
+                                <tr>
+                                    <td><strong>{{ user.id }}</strong></td>
+                                    <td>{{ user.username }}</td>
+                                    <td>{{ user.full_name }}</td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <h5>No users registered yet!</h5>
+                        <p>Users will appear here once they register for the parking system.</p>
+                    </div>
+                {% endif %}
+                
+                <div class="mt-3">
+                    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary">← Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

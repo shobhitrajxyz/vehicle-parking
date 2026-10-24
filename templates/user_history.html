@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}My Parking History - User{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">My Parking History</h4>
+                <span class="badge bg-light text-dark">Total Sessions: {{ history|length }}</span>
+            </div>
+            <div class="card-body">
+                {% if history %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="table-info">
+                                <tr>
+                                    <th>Spot ID</th>
+                                    <th>Parking Lot</th>
+                                    <th>Vehicle Number</th>
+                                    <th>Parked Time</th>
+                                    <th>Left Time</th>
+                                    <th>Duration</th>
+                                    <th>Cost</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in history %}
+                                <tr>
+                                    <td><strong>{{ record.spot.id }}</strong></td>
+                                    <td>{{ record.lot.prime_location_name }}</td>
+                                    <td><strong>{{ record.reservation.vehicle_number or 'N/A' }}</strong></td>
+                                    <td>{{ record.reservation.parking_timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                                    <td>
+                                        {% if record.reservation.leaving_timestamp %}
+                                            {{ record.reservation.leaving_timestamp.strftime('%Y-%m-%d %H:%M') }}
+                                        {% else %}
+                                            <span class="text-warning">Still Active</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if record.reservation.leaving_timestamp %}
+                                            <span class="badge bg-primary">{{ record.duration_minutes if record.duration_minutes > 0 else 1 }} min</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Active</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if record.reservation.parking_cost %}
+                                            <strong class="text-success">₹{{ record.reservation.parking_cost }}</strong>
+                                        {% else %}
+                                            <span class="text-muted">₹0</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if record.reservation.leaving_timestamp %}
+                                            <span class="badge bg-success">Completed</span>
+                                        {% else %}
+                                            <span class="badge bg-warning">Active</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Summary Stats -->
+                    {% set completed_sessions = history|selectattr('reservation.leaving_timestamp')|list|length %}
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body text-center">
+                                    <h4>{{ history|length }}</h4>
+                                    <p class="mb-0">Total Sessions</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-success text-white">
+                                <div class="card-body text-center">
+                                    <h4>{{ completed_sessions }}</h4>
+                                    <p class="mb-0">Completed</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-info text-white">
+                                <div class="card-body text-center">
+                                    <h4>₹{{ total_cost }}</h4>
+                                    <p class="mb-0">Total Spent</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                {% else %}
+                    <div class="alert alert-info text-center">
+                        <h5>No parking history found!</h5>
+                        <p>Your parking sessions will appear here once you start using the system.</p>
+                        <a href="{{ url_for('user.view_lots') }}" class="btn btn-primary">Find Parking</a>
+                    </div>
+                {% endif %}
+                
+                <div class="mt-3">
+                    <a href="{{ url_for('user.dashboard') }}" class="btn btn-outline-secondary">← Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

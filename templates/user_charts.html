@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}My Parking Summary - User{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">My Parking Summary</h4>
+            </div>
+            <div class="card-body">
+                <!-- User Statistics -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body text-center">
+                                <h3>{{ user_data.total_sessions }}</h3>
+                                <p class="mb-0">Total Sessions</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body text-center">
+                                <h3>{{ user_data.completed_sessions }}</h3>
+                                <p class="mb-0">Completed</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-dark">
+                            <div class="card-body text-center">
+                                <h3>{{ user_data.active_sessions }}</h3>
+                                <p class="mb-0">Active</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body text-center">
+                                <h3>₹{{ user_data.total_spent }}</h3>
+                                <p class="mb-0">Total Spent</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Session Status Chart -->
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5>My Session Status</h5>
+                            </div>
+                            <div class="card-body">
+                                {% if user_data.total_sessions > 0 %}
+                                    {% set completed_percent = (user_data.completed_sessions / user_data.total_sessions * 100)|round %}
+                                    {% set active_percent = (user_data.active_sessions / user_data.total_sessions * 100)|round %}
+                                    
+                                    <p><strong>Completed Sessions: {{ user_data.completed_sessions }} ({{ completed_percent }}%)</strong></p>
+                                    <div class="progress mb-3" style="height: 25px;">
+                                        <div class="progress-bar bg-success" style="width: {{ completed_percent }}%">
+                                            {{ completed_percent }}%
+                                        </div>
+                                    </div>
+                                    
+                                    {% if user_data.active_sessions > 0 %}
+                                    <p><strong>Active Sessions: {{ user_data.active_sessions }} ({{ active_percent }}%)</strong></p>
+                                    <div class="progress mb-3" style="height: 25px;">
+                                        <div class="progress-bar bg-warning" style="width: {{ active_percent }}%">
+                                            {{ active_percent }}%
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                {% else %}
+                                    <div class="text-center">
+                                        <p class="text-muted">No parking sessions yet.</p>
+                                        <a href="{{ url_for('user.view_lots') }}" class="btn btn-primary">Find Parking</a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-3 text-center">
+                    <a href="{{ url_for('user.dashboard') }}" class="btn btn-outline-secondary">← Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Parking Management System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="dashboard-card">
+            <h2 class="text-primary">Admin Dashboard</h2>
+            <p class="lead">Welcome, Admin! Manage your parking system efficiently.</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">Parking Lot Management</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <a href="{{ url_for('admin.view_lots') }}" class="list-group-item list-group-item-action">
+                        View All Parking Lots
+                    </a>
+                    <a href="{{ url_for('admin.add_lot') }}" class="list-group-item list-group-item-action">
+                        Add New Parking Lot
+                    </a>
+                    <a href="{{ url_for('admin.view_spots') }}" class="list-group-item list-group-item-action">
+                        View Parking Spots
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">User & Records Management</h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    <a href="{{ url_for('admin.view_users') }}" class="list-group-item list-group-item-action">
+                        View All Users
+                    </a>
+                    <a href="{{ url_for('admin.all_parking_records') }}" class="list-group-item list-group-item-action">
+                        View All Parking Records
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0">Analytics & Reports</h5>
+            </div>
+            <div class="card-body">
+                <div class="text-center">
+                    <a href="{{ url_for('admin.charts') }}" class="btn btn-primary btn-lg">
+                        View Summary Charts
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
